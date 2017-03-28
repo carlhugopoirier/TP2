@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+<title>Carl-Hugo Poirier TP2</title>
+</head>
+<body>
+  <div class='global'>
+  	  <header>
+  	  	
+  	  </header>
+  	  <main>
+      <h1>Carl-Hugo Poirier TP2</h1>
+      <h2> Carnet d'addresse </h2>
+		  <table class="tableau">
+        <tr>
+          <th class='moyen'> Nom </th>
+          <th class='moyen'> Prénom </th>
+          <th class='moyen'> Téléphone </th>
+          <th class='long'> _id </th>
+          <th class='petit'> __ </th>
+          <th class='petit'><i class="fa fa-plus-circle" aria-hidden="true"></i></th>
+        </tr>
+          <tr>
+          <% for(var i=0; i<adresse.length; i++) {%>
+            <td>
+              <span><%= adresse[i].nom %></span>
+            </td>
+            <td>
+               <span><%= adresse[i].prenom %></span>
+            </td>
+            <td>
+              <span><%= adresse[i].tel %></span>
+            </td>
+             <td>
+               <span><%= adresse[i].id %></span>
+            </td>
+            <td>
+             <i id="vert" class="fa fa-floppy-o" aria-hidden="true"></i>
+            </td>
+            <td>
+              <i id="rouge" class="fa fa-trash" aria-hidden="true"></i>
+            </td>
+          </tr>
+          
+		  </table>
+	  </main>
+	  <footer>
+	  </footer>
+  </div>
+</body>
+</html>
