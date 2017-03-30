@@ -11,21 +11,52 @@ app.use(bodyParser.json())  // pour traiter les données JSON
 
 var db // variable qui contiendra le lien sur la BD
 
-		MongoClient.connect('mongodb://127.0.0.1:27017/carnet_adresse', (err, database) => {
-		  if (err) return console.log(err)
-		  db = database
-		  app.listen(8081, () =>{
-		    console.log('connexion à la BD et on écoute sur le port 8081')
-		  })
-		})
+MongoClient.connect('mongodb://127.0.0.1:27017/carnet_adresse', (err, database) => {
+	 if (err) return console.log(err)
+	 db = database
+	app.listen(8081, () =>{
+	 console.log('connexion à la BD et on écoute sur le port 8081')
+ })
+})
+
+
+// afficher la db de MongoDB
+app.get('/',  (req, res)  => {
+   console.log('la route route get / = ' + req.url)
+ 
+    var cursor = db.collection('adresses').find().toArray(function(err, resultat){
+       if (err) return console.log(err)
+    // renders index.ejs
+    // affiche le contenu de la BD
+    res.render('index.ejs', {adresses:resultat})
+    })  
+})
+
+
 
 // ajouter
 app.post('/ajouter',  (req, res) => {
-  db.collection('adresses').save(req.body, (err, result) => {
-      if (err) return console.log(err)
-      console.log('sauvegarder dans la BD')
-      res.redirect('/')
-    })
+
+  console.log(req.body._id);
+
+     var ajoutAdresse={};
+    //var 
+
+    if(req.body._id !="")
+    {
+      ajoutAdresse['_id']=ObjectID(req.body._id);
+    }
+
+    ajoutAdresse["nom"] = req.body.nom;
+    ajoutAdresse["prenom"] = req.body.prenom;
+    ajoutAdresse["telephone"] = req.body.telephone;
+
+
+        db.collection('adresses').save(ajoutAdresse, (err, result) => {
+        if (err) return console.log(err)
+        console.log('sauvegarder dans la BD')
+        res.redirect('/')
+      })
 })
 
 
@@ -40,31 +71,7 @@ app.get('/detruire/:id', (req, res) => {
 if (err) return console.log(err)
  res.redirect('/')  // redirige vers la route qui affiche la collection
  })
-})
-
-
-
-// modifier
-app.post('/modifier/:id', (req, res) =>{
-  var id = req.params.id
-  console.log(id)
-  if (err) return console.log(err)
-  res.redirect('/')  // redirige vers la route qui affiche la collection
- })
 });
 
 
-
-// afficher la db de MongoDB
-
-app.get('/',  (req, res)  => {
-   console.log('la route route get / = ' + req.url)
- 
-    var cursor = db.collection('adresses').find().toArray(function(err, resultat){
-       if (err) return console.log(err)
-    // renders index.ejs
-    // affiche le contenu de la BD
-    res.render('index.ejs', {adresses:resultat})
-    })  
-})
 

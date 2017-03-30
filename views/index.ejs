@@ -11,12 +11,6 @@
 <body>
       <h1>Carl-Hugo Poirier - Travail pratique 2</h1>
       <h2> Carnet d'adresse </h2>
-  <!--button id='update'>Mise à jour téléphone</button>
-    <form action="/adresse" method="POST">
-    <input type="text" placeholder="nom" name="nom">
-    <input type="text" placeholder="Telephone" name="telephone">
-    <button type="submit">Submit</button>
-  </form-->
 
   <table class="adresse">
      <tr>
@@ -30,119 +24,116 @@
     <tbody> 
 
         <% for(var i=0; i<adresses.length; i++) {%>
-          <form class='modifier' action="/modifier" method="POST">
-          <tr class="client">
-             <td class='prenom' contenteditable="true"> <%= adresses[i].prenom %> </td>
-             <td class='nom' contenteditable="true"> <%= adresses[i].nom %> </td>
-             <td class='tel' contenteditable="true"> <%= adresses[i].tel %> </td>
-             <td> <%= adresses[i]._id %> </td>
-             <td> <i id="modifier" class="fa fa-floppy-o" aria-hidden="true"></i></td>
-             <td> <a href="detruire/<%= adresses[i]._id %> %>"<i id="detruire" class="fa fa-trash" aria-hidden="true"></i> </a></td>
-             <td><button type="submit">-</button>
+          <table class='tableau'>
+             <tr class="client">
+              <td class='prenom' contenteditable="true"> <%= adresses[i].prenom %> </td>
+              <td class='nom' contenteditable="true"> <%= adresses[i].nom %> </td>
+              <td class='tel' contenteditable="true"> <%= adresses[i].tel %> </td>
+              <td> <%= adresses[i]._id %> </td>
+              <td> <i id="modifier" class="fa fa-floppy-o modifier" aria-hidden="true"></i></td>
+              <td> <a href="detruire/<%= adresses[i]._id %> %>"<i id="detruire" class="fa fa-trash" aria-hidden="true"></i> </a></td>
        </tr>
-       </form>
+       </table>
   <% } %>
 
     </tbody>
 <script>
 
-  //ajouter
+  // Fonction ajouter
   elmAjouter = document.getElementById('ajouter');
   elmAjouter.addEventListener('click', function() {
-  console.log('ajouter')
-  elmForm = document.createElement('form');
-  elmTr = document.createElement('tr');
+  // TEST console.log('ajouter')
 
-  //id, nom -1
-    elmTd1 = document.createElement('td');                 
-    elmTd1.setAttribute("contenteditable", "true" );   
-    var att = document.createAttribute("id");
-    elmTd1.setAttribute("id", "nom" );      
+  // Création du formulaire
+   elmForm = document.createElement('form');
+   elmForm.setAttribute("id","formulaire");
+   elmForm.setAttribute("action","/ajouter");
+   elmForm.setAttribute("method","POST");
 
-  //id, prenom -2
-    elmTd2 = document.createElement('td');                 
-    elmTd2.setAttribute("contenteditable", "true" );   
-    var att = document.createAttribute("id");
-    elmTd2.setAttribute("id", "prenom" );    
+  // Création du TR
+   elmTr = document.createElement('tr');
 
-  //id, tel -3
-    elmTd3 = document.createElement('td');                 
-    elmTd3.setAttribute("contenteditable", "true" );   
-    var att = document.createAttribute("id");
-    elmTd3.setAttribute("id", "tel" );    
+  // Création des tds noms, prenoms et tel
+  //nom
+    elmTd1 = document.createElement('td');   
+    elmTd1Input = document.createElement('input');              
+    elmTd1Input.setAttribute("id", "nom" );      
+    elmTd1Input.setAttribute("type", "text" );  
+    elmTd1Input.setAttribute("placeholder", "Nom" ); 
+    elmTd1Input.setAttribute("name", "nom" );  
 
-  //id, _id -4
+    elmTd1.appendChild(elmTd1Input);
+
+  //prenom
+    elmTd2 = document.createElement('td');   
+    elmTd2Input = document.createElement('input');              
+    elmTd2Input.setAttribute("id", "prenom" );      
+    elmTd2Input.setAttribute("type", "text" );  
+    elmTd2Input.setAttribute("placeholder", "Prénom" ); 
+    elmTd2Input.setAttribute("name", "prenom" );  
+
+    elmTd2.appendChild(elmTd2Input);
+
+   //prenom
+    elmTd3 = document.createElement('td');   
+    elmTd3Input = document.createElement('input');              
+    elmTd3Input.setAttribute("id", "tel" );      
+    elmTd3Input.setAttribute("type", "text" );  
+    elmTd3Input.setAttribute("placeholder", "Téléphone" ); 
+    elmTd3Input.setAttribute("name", "tel" );  
+
+    elmTd3.appendChild(elmTd3Input);
+
+ // Création des tds spéciaux, id et les icônes
     elmTd4 = document.createElement('td');                 
     elmTd4.setAttribute("contenteditable", "false" );   
-    var att = document.createAttribute("id");
     elmTd4.setAttribute("id", "_id" );   
 
   //id, enr -5
-    elmTd5 = document.createElement('td');    
-    var att = document.createAttribute("id");
+    elmTd5 = document.createElement('button');    
     elmTd5.setAttribute("id", "modifier" ); 
-    var att = document.createAttribute("class");
     elmTd5.setAttribute("class", "fa fa-floppy-o" ); 
-    var att = document.createAttribute("aria-hidden");
     elmTd5.setAttribute("aria-hidden", "true" );
+    elmTd5.setAttribute("type", "submit" );
 
+  // Création de la ligne dans le tableau
+    elmTr.appendChild(elmTd1);
+    elmTr.appendChild(elmTd2);
+    elmTr.appendChild(elmTd3);
+    elmTr.appendChild(elmTd4);
+    elmTr.appendChild(elmTd5);
+    elmForm.appendChild(elmTr);
 
-  //id, del -6
-    elmTd6 = document.createElement('td');    
-    var att = document.createAttribute("id");
-    elmTd6.setAttribute("id", "detruire" ); 
-    var att = document.createAttribute("class");
-    elmTd6.setAttribute("class", "fa fa-trash" ); 
-    var att = document.createAttribute("aria-hidden");
-    elmTd6.setAttribute("aria-hidden", "true" ); 
+  // On place la ligne en haut du tableau
+    elmTbody = document.querySelector('.adresse tbody');
+    elmPremierTr = document.querySelector('.client tr');
 
-
-  elmTr.appendChild(elmTd1);
-  elmTr.appendChild(elmTd2);
-  elmTr.appendChild(elmTd3);
-  elmTr.appendChild(elmTd4);
-  elmTr.appendChild(elmTd5);
-  elmTr.appendChild(elmTd6);
-  elmForm.appendchild(elmTr);
-
-
-
-  elmTbody = document.querySelector('.adresse tbody');
-  elmPremierTr = document.querySelector('.client tr');
-
-  elmTbody.insertBefore(elmTr, elmPremierTr);
+    elmTbody.insertBefore(elmForm, elmPremierTr);
   
-
-})
-
-  //Modifier
-  
-
-  elmModifier = document.querySelectorAll('.modifier');
-
-  [].foreach.call(elmModifier, function(elm) {
-       elmModifier.addEventListener('click', function() {
-       var elmLigne = this.parentNode
-    console.log('modifier');
-
-  document.getElementById('nom').value = elmLigne.getElementsByClassName('nom')[0].innerHTML  
-  document.getElementById('prenom').value = elmLigne.getElementsByClassName('prenom')[0].innerHTML
-  document.getElementById('tel').value = elmLigne.getElementsByClassName('tel')[0].innerHTML
+})//fin de la fonction ajouter
 
 
+//Fonction modifier (ne fonctionne pas)
+  var elmModifier = document.getElementsByClassName('modifier')
+
+  for (var k=0 ;k<elmModifier.length; k++) {
+    elmModifier[k].addEventListener('click', function(elm){
+    var elmLigne = this.parentNode;
+      console.log(elmLigne);
+
+      document.getElementById("nom").value = elmLigne.getElementsByClassName("nom")[0].innerHTML;
+      document.getElementById("prenom").value = elmLigne.getElementsByClassName("prenom")[0].innerHTML;
+      document.getElementById("tel").value = elmLigne.getElementsByClassName("tel")[0].innerHTML;
+      document.getElementById("_id").value = elmLigne.getElementsByClassName("_id")[0].innerHTML;
+
+      var elmForm = document.getElementById("formulaire");
+      elmForm.submit();
   })
- 
- 
+}
 
-  }
 
   
   //
-
-
-
-
-})
 
 
 
