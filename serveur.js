@@ -20,7 +20,6 @@ var db // variable qui contiendra le lien sur la BD
 		})
 
 // ajouter
-
 app.post('/ajouter',  (req, res) => {
   db.collection('adresses').save(req.body, (err, result) => {
       if (err) return console.log(err)
@@ -29,8 +28,9 @@ app.post('/ajouter',  (req, res) => {
     })
 })
 
-// detruire
 
+
+// detruire
 app.get('/detruire/:id', (req, res) => {
  var id = req.params.id
  console.log(id)
@@ -42,12 +42,12 @@ if (err) return console.log(err)
  })
 })
 
-// modifier
 
+
+// modifier
 app.post('/modifier/:id', (req, res) =>{
   var id = req.params.id
   console.log(id)
-  db.collection('adresses').findOneAndDelete({"_id": ObjectID(req.params.id)}, (err, resultat) => {
   if (err) return console.log(err)
   res.redirect('/')  // redirige vers la route qui affiche la collection
  })
