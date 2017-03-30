@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mon Application</title>
+
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+      <h1>Carl-Hugo Poirier TP2</h1>
+      <h2> Carnet d'addresse </h2>
+  <!--button id='update'>Mise à jour téléphone</button>
+    <form action="/adresse" method="POST">
+    <input type="text" placeholder="nom" name="nom">
+    <input type="text" placeholder="Telephone" name="telephone">
+    <button type="submit">Submit</button>
+  </form-->
+
+  <table class="adresse">
+     <tr>
+          <th class='moyen'> Nom </th>
+          <th class='moyen'> Prénom </th>
+          <th class='moyen'> Téléphone </th>
+          <th class='long'> _id </th>
+          <th class='petit'> __ </th>
+          <th id='ajouter' class='petit'><i class="fa fa-plus-circle" aria-hidden="true"></i></th>
+    </tr>
+    <tbody> 
+        <% for(var i=0; i<adresses.length; i++) {%>
+          <tr class="client">
+             <td> <%= adresses[i].prenom %> </td>
+             <td> <%= adresses[i].nom %> </td>
+             <td> <%= adresses[i].tel %> </td>
+             <td> <%= adresses[i]._id %> </td>
+             <td> <a href="/modifier/<%= adresses[i]._id %>" ><i id="vert" class="fa fa-floppy-o" aria-hidden="true"></i> </a></td>
+             <td> <a href="detruire/<%= adresses[i]._id %> %>"<i id="rouge" class="fa fa-trash" aria-hidden="true"></i> </a></td>
+       </tr>
+  <% } %>
+    </tbody>
+<script>
+
+//ajouter
+elmAjouter = document.getElementById('ajouter');
+elmAjouter.addEventListener('click', function() {
+console.log('ajouter')
+elmTr = document.createElement('tr');
+
+//id, nom -1
+  elmTd1 = document.createElement('td');                 
+  elmTd1.setAttribute("contenteditable", "true" );   
+  var att = document.createAttribute("id");
+  elmTd1.setAttribute("id", "nom" );      
+
+//id, prenom -2
+  elmTd2 = document.createElement('td');                 
+  elmTd2.setAttribute("contenteditable", "true" );   
+  var att = document.createAttribute("id");
+  elmTd2.setAttribute("id", "prenom" );    
+
+//id, tel -3
+  elmTd3 = document.createElement('td');                 
+  elmTd3.setAttribute("contenteditable", "true" );   
+  var att = document.createAttribute("id");
+  elmTd3.setAttribute("id", "tel" );    
+
+//id, _id -4
+  elmTd4 = document.createElement('td');                 
+  elmTd4.setAttribute("contenteditable", "false" );   
+  var att = document.createAttribute("id");
+  elmTd4.setAttribute("id", "_id" );   
+
+//id, enr -5
+  elmTd5 = document.createElement('td');    
+  var att = document.createAttribute("id");
+  elmTd5.setAttribute("id", "vert" ); 
+  var att = document.createAttribute("class");
+  elmTd5.setAttribute("class", "fa fa-floppy-o" ); 
+  var att = document.createAttribute("aria-hidden");
+  elmTd5.setAttribute("aria-hidden", "true" ); 
+
+//id, del -6
+  elmTd6 = document.createElement('td');    
+  var att = document.createAttribute("id");
+  elmTd6.setAttribute("id", "rouge" ); 
+  var att = document.createAttribute("class");
+  elmTd6.setAttribute("class", "fa fa-trash" ); 
+  var att = document.createAttribute("aria-hidden");
+  elmTd6.setAttribute("aria-hidden", "true" ); 
+
+
+elmTr.appendChild(elmTd1);
+elmTr.appendChild(elmTd2);
+elmTr.appendChild(elmTd3);
+elmTr.appendChild(elmTd4);
+elmTr.appendChild(elmTd5);
+elmTr.appendChild(elmTd6);
+
+elmTbody = document.querySelector('.adresse tbody');
+elmPremierTr = document.querySelector('.client tr');
+
+elmTbody.insertBefore(elmTr, elmPremierTr);
+
+
+})
+
+</script>
+
+
+</body>
+</html>
+</html>

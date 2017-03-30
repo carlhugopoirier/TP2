@@ -11,37 +11,58 @@ app.use(bodyParser.json())  // pour traiter les données JSON
 
 var db // variable qui contiendra le lien sur la BD
 
-		MongoClient.connect('mongodb://carnet_adresse', function(err, database)  {
+		MongoClient.connect('mongodb://127.0.0.1:27017/carnet_adresse', (err, database) => {
 		  if (err) return console.log(err)
 		  db = database
-		  app.listen(8081, function() {
+		  app.listen(8081, () =>{
 		    console.log('connexion à la BD et on écoute sur le port 8081')
 		  })
 		})
 
+// ajouter
 
-app.get('/', function (req, res) {
- 	fs.readFile('public/text/collection_provinces.json', 'utf-8', function (err, data) {
-		if (err) return console.error(err);
-			obj = JSON.parse(data)
-			console.log(obj);
-		  	res.render('index.ejs', {provinces: obj});
-		});
+app.post('/adresse',  (req, res) => {
+  db.collection('adresse').save(req.body, (err, result) => {
+      if (err) return console.log(err)
+      console.log('sauvegarder dans la BD')
+      res.redirect('/')
+    })
 })
 
-app.get('/afficher',  function(req, res)  {
+// detruire
+
+app.get('/detruire/:id', (req, res) => {
+ var id = req.params.id
+ console.log(id)
+ db.collection('adresses')
+ .findOneAndDelete({"_id": ObjectID(req.params.id)}, (err, resultat) => {
+
+if (err) return console.log(err)
+ res.redirect('/')  // redirige vers la route qui affiche la collection
+ })
+})
+
+app.post('/modifier/:id', (req, res) =>{
+  var id = req.params.id
+  console.log(id)
+  db.collection('adresses').findOneAndDelete({"_id": ObjectID(req.params.id)}, (err, resultat) => {
+  if (err) return console.log(err)
+  res.redirect('/')  // redirige vers la route qui affiche la collection
+ })
+});
+
+
+
+// afficher la db de MongoDB
+
+app.get('/',  (req, res)  => {
    console.log('la route route get / = ' + req.url)
  
-    var cursor = db.collection('adresse').find().toArray(function(err, resultat){
+    var cursor = db.collection('adresses').find().toArray(function(err, resultat){
        if (err) return console.log(err)
     // renders index.ejs
     // affiche le contenu de la BD
-    res.render('index.ejs', {adresse:resultat})
-
-    }) 
-    
-
+    res.render('index.ejs', {adresses:resultat})
+    })  
 })
-
-
 
