@@ -21,8 +21,8 @@ var db // variable qui contiendra le lien sur la BD
 
 // ajouter
 
-app.post('/adresse',  (req, res) => {
-  db.collection('adresse').save(req.body, (err, result) => {
+app.post('/ajouter',  (req, res) => {
+  db.collection('adresses').save(req.body, (err, result) => {
       if (err) return console.log(err)
       console.log('sauvegarder dans la BD')
       res.redirect('/')
@@ -41,6 +41,8 @@ if (err) return console.log(err)
  res.redirect('/')  // redirige vers la route qui affiche la collection
  })
 })
+
+// modifier
 
 app.post('/modifier/:id', (req, res) =>{
   var id = req.params.id
