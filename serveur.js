@@ -33,8 +33,6 @@ var db // variable qui contiendra le lien sur la BD
       })  
     })
 
-
-
 // Ajout d'un élément dans la db MongoDB
     app.post('/ajouter',  (req, res) => {
     console.log(req.body._id);
@@ -54,8 +52,6 @@ var db // variable qui contiendra le lien sur la BD
         res.redirect('/')
       })
     })
-
-
 
 // Destruction d'un élément dans la db MongoDB
     app.get('/detruire/:id', (req, res) => {
