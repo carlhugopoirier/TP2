@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Mon Application</title>
+  <title>Carl-Hugo Poirier - TP2</title>
 
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
@@ -20,26 +20,26 @@
           <th class='long'> _id </th>
           <th class='petit'> __ </th>
           <th id='ajouter' class='petit'><i class="fa fa-plus-circle" aria-hidden="true"></i></th>
-    </tr>
+     </tr>
+
     <tbody> 
-
+    <!-- Boucle qui génère la DB de MongoDb -->
         <% for(var i=0; i<adresses.length; i++) {%>
-          <table class='tableau'>
-             <tr class="client">
-              <td class='prenom' contenteditable="true"> <%= adresses[i].prenom %> </td>
-              <td class='nom' contenteditable="true"> <%= adresses[i].nom %> </td>
-              <td class='tel' contenteditable="true"> <%= adresses[i].tel %> </td>
-              <td> <%= adresses[i]._id %> </td>
-              <td> <i id="modifier" class="fa fa-floppy-o modifier" aria-hidden="true"></i></td>
-              <td> <a href="detruire/<%= adresses[i]._id %> %>"<i id="detruire" class="fa fa-trash" aria-hidden="true"></i> </a></td>
-       </tr>
-       </table>
-  <% } %>
-
+            <tr class="client">
+                <td class='nom moyen' contenteditable="true"> <%= adresses[i].nom %> </td>
+                <td class='prenom moyen' contenteditable="true"> <%= adresses[i].prenom %> </td>
+                <td class='tel moyen' contenteditable="true"> <%= adresses[i].tel %> </td>
+                <td class='long'> <%= adresses[i]._id %> </td>
+                <!-- icônes --> 
+                <td class='petit'> <i id="modifier" class="fa fa-floppy-o modifier" aria-hidden="true"></i></td>
+                <td class='petit'> <a href="detruire/<%= adresses[i]._id %> %>"<i id="detruire" class="fa fa-trash" aria-hidden="true"></i> </a></td>
+            </tr>
+         <% } %>
     </tbody>
 <script>
 
-  // Fonction ajouter
+// Fonction ajouter
+// L'ajout fonctionne mais lors de l'ajout à cause du insertBefore, le CSS a quelques problèmes
   elmAjouter = document.getElementById('ajouter');
   elmAjouter.addEventListener('click', function() {
   // TEST console.log('ajouter')
@@ -47,6 +47,7 @@
   // Création du formulaire
    elmForm = document.createElement('form');
    elmForm.setAttribute("id","formulaire");
+   elmForm.setAttribute("class","form");
    elmForm.setAttribute("action","/ajouter");
    elmForm.setAttribute("method","POST");
 
@@ -64,7 +65,7 @@
 
     elmTd1.appendChild(elmTd1Input);
 
-  //prenom
+  // prénom
     elmTd2 = document.createElement('td');   
     elmTd2Input = document.createElement('input');              
     elmTd2Input.setAttribute("id", "prenom" );      
@@ -74,7 +75,7 @@
 
     elmTd2.appendChild(elmTd2Input);
 
-   //prenom
+   // téléphone
     elmTd3 = document.createElement('td');   
     elmTd3Input = document.createElement('input');              
     elmTd3Input.setAttribute("id", "tel" );      
@@ -89,7 +90,7 @@
     elmTd4.setAttribute("contenteditable", "false" );   
     elmTd4.setAttribute("id", "_id" );   
 
-  //id, enr -5
+  //_id (de MongoDB)
     elmTd5 = document.createElement('button');    
     elmTd5.setAttribute("id", "modifier" ); 
     elmTd5.setAttribute("class", "fa fa-floppy-o" ); 
@@ -104,37 +105,62 @@
     elmTr.appendChild(elmTd5);
     elmForm.appendChild(elmTr);
 
-  // On place la ligne en haut du tableau
+  // On place la ligne en haut du tableau (fonctionne à moitié)
     elmTbody = document.querySelector('.adresse tbody');
     elmPremierTr = document.querySelector('.client tr');
 
     elmTbody.insertBefore(elmForm, elmPremierTr);
   
-})//fin de la fonction ajouter
+  })
+//fin de la fonction ajouter
 
 
 //Fonction modifier (ne fonctionne pas)
   var elmModifier = document.getElementsByClassName('modifier')
 
+  //boucle avec AJAX
   for (var k=0 ;k<elmModifier.length; k++) {
     elmModifier[k].addEventListener('click', function(elm){
     var elmLigne = this.parentNode;
       console.log(elmLigne);
 
-      document.getElementById("nom").value = elmLigne.getElementsByClassName("nom")[0].innerHTML;
-      document.getElementById("prenom").value = elmLigne.getElementsByClassName("prenom")[0].innerHTML;
-      document.getElementById("tel").value = elmLigne.getElementsByClassName("tel")[0].innerHTML;
-      document.getElementById("_id").value = elmLigne.getElementsByClassName("_id")[0].innerHTML;
+  xhr = new XMLHttpRequest();
+  xhr.open('POST', "modifier", true);
+  data = { 
+     "modif":{
+     "nom" : elmLigne[0].innerHTML,
+     "prenom" : elmLigne[1].innerHTML,
+     "telephone" : elmLigne[2].innerHTML
+     },
+     "_id" : elmLigne[3].innerHTML 
+  }
 
-      var elmForm = document.getElementById("formulaire");
-      elmForm.submit();
+  sData = JSON.stringify(data);
+  xhr.setRequestHeader('Content-type', 'application/json');
+  xhr.send(sData);
+  xhr.addEventListener("readystatechange", traiterRequest, false);
+
+  function traiterRequest(e){
+  console.log("xhr.readyState = " + xhr.readyState)
+  console.log("xhr.status = " + xhr.status)
+  if(xhr.readyState == 4 && xhr.status == 200){
+   console.log('ajax fonctionne')
+   var response = JSON.parse(xhr.responseText);
+   console.log(xhr.responseText);
+   elmChamp_id.innerHTML = response[0]._id
+   elmLigne.style.backgroundColor = "#0f0"
+    }
+   }
+
+  document.getElementById("nom").value = elmLigne.getElementsByClassName("nom")[0].innerHTML;
+  document.getElementById("prenom").value = elmLigne.getElementsByClassName("prenom")[0].innerHTML;
+  document.getElementById("tel").value = elmLigne.getElementsByClassName("tel")[0].innerHTML;
+  document.getElementById("_id").value = elmLigne.getElementsByClassName("_id")[0].innerHTML;
+
+  var elmForm = document.getElementById("formulaire");
+  elmForm.submit();
   })
 }
-
-
-  
-  //
-
 
 
 </script>
