@@ -11,6 +11,7 @@ app.use(bodyParser.json())  // pour traiter les données JSON
 
 var db // variable qui contiendra le lien sur la BD
 
+//Connection avec MongoDB
 MongoClient.connect('mongodb://127.0.0.1:27017/carnet_adresse', (err, database) => {
 	 if (err) return console.log(err)
 	 db = database
@@ -20,21 +21,21 @@ MongoClient.connect('mongodb://127.0.0.1:27017/carnet_adresse', (err, database) 
 })
 
 
-// afficher la db de MongoDB
+// Affichage de la db Adresse avec MongoDB
 app.get('/',  (req, res)  => {
    console.log('la route route get / = ' + req.url)
  
     var cursor = db.collection('adresses').find().toArray(function(err, resultat){
        if (err) return console.log(err)
     // renders index.ejs
-    // affiche le contenu de la BD
+    // affiche le contenu de la BD adresses
     res.render('index.ejs', {adresses:resultat})
     })  
 })
 
 
 
-// ajouter
+// Ajout d'un élément dans la db MongoDB
 app.post('/ajouter',  (req, res) => {
 
   console.log(req.body._id);
